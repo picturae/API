@@ -128,76 +128,183 @@ The API endpoints are described using [URI templates](http://www.rfc-editor.org/
 
 ## institutions
 
+Institutions have the rdf:type <http://www.w3.org/ns/org#FormalOrganization>
+
+Institutions contain the following internally used predicates:
+
+<http://www.w3.org/2006/vcard/ns#ADR>
+<http://www.w3.org/2006/vcard/ns#Country>
+<http://www.w3.org/2006/vcard/ns#EMAIL>
+<http://www.w3.org/2006/vcard/ns#Locality>
+<http://www.w3.org/2006/vcard/ns#Pcode>
+<http://www.w3.org/2006/vcard/ns#orgunit>
+<http://openskos.org/xmlns#code>
+<http://openskos.org/xmlns#disableSearchInOtherTenants>
+<http://openskos.org/xmlns#enableStatussesSystem>
+<http://openskos.org/xmlns#enableskosxl>
+<http://openskos.org/xmlns#name>
+<http://openskos.org/xmlns#uuid>
+<http://openskos.org/xmlns#webpage>
+
+
 `.../institutions?<query params>&<limit params>`
+
+`.../institution?uri={uri}&<query params>` (foreign uri)
 
 `.../institution/{id}?<query params>` (native uri)
 
-`.../institution?uri={uri}&<query params>` (foreign uri)
+`{id}` will be applied to, in order of precedence: <http://openskos.org/xmlns#uuid>, <http://openskos.org/xmlns#code> 
 
 `<query params>`
 * level:
   * `1`: data properties of the institution (default)
-  * `2`: + object properties of the institution
-  * `3`: + data properties of the set
-  * `4`: + object properties of the set
+  * `2`: + object properties of the institution [On Hold]
+  * `3`: + data properties of the set [On Hold]
+  * `4`: + object properties of the set [On Hold]
 
 NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more interesting for external LD parties
+
+
+`<filter params>`
+
+*Institutions are the top level objects in the SKOS hierachy, and have no filters.*
 
 `<limit params>`
 * limit=`nr of institutions to return`
 * offset=`offset seen institution`
 
+
+
+Return codes
+
+  - 200 Institution found and data returned
+  - 400 Attempted to filter on un-usable predicate
+  - 400 Unusable limit or level parameters
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
+
 ## sets
+
+Institutions have the rdf:type <http://openskos.org/xmlns#set>
+
+Sets contain the following internally used predicates:
+
+<http://purl.org/dc/terms/description>
+<http://purl.org/dc/terms/license>
+<http://purl.org/dc/terms/publisher>
+<http://purl.org/dc/terms/title>
+<http://openskos.org/xmlns#allow_oai>
+<http://openskos.org/xmlns#code>
+<http://openskos.org/xmlns#conceptBaseUri>
+<http://openskos.org/xmlns#oai_baseURL>
+<http://openskos.org/xmlns#tenant>
+<http://openskos.org/xmlns#webpage>
+
 
 `.../sets?<query params>&<filter params>&<limit params>`
 
 `.../set/{id}?<query params>` (native uri)
 
+`{id}` will be applied to, in order of precedence: <http://openskos.org/xmlns#code> 
+
 `.../set?uri={uri}&<query params>` (foreign uri)
+
+@TODO: Within OpenSkos, sets seemingly do not have uuids. Should this be applied?
+
 
 `<query params>`
 * level:
   * `1`: data properties of the set (default)
-  * `2`: + object properties of the set
-  * `3`: + data properties of the concept scheme or collection
-  * `4`: + object properties of the concept scheme or collection
+  * `2`: + object properties of the set [On Hold]
+  * `3`: + data properties of the concept scheme or collection [On Hold]
+  * `4`: + object properties of the concept scheme or collection [On Hold]
 
 NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more interesting for external LD parties
 
 `<filter params>`
-* institutions=`comma separated list of institution URIs or IDs`
+* institutions=`comma separated list of institution URIs or IDs`. Applied to <http://openskos.org/xmlns#tenant>
+
+@TODO: Why is the set predicate <http://openskos.org/xmlns#tenant> equivalent to the tenant predicate <http://openskos.org/xmlns#code> ?
 
 `<limit params>`
 * limit=`nr of sets to return`
 * offset=`offset of last seen set` (NOTE: starts at 0)
 
+
+Return codes
+
+  - 200 Set found and data returned
+  - 400 Attempted to filter on un-usable predicate
+  - 400 Unusable limit or level parameters
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
+
 ## concept schemes
+
+ConceptSchemes have the rdf:type <http://www.w3.org/2004/02/skos/core#ConceptScheme>
+
+Concept-Schemes may contain the following internally used predicates:
+
+<http://www.w3.org/2004/02/skos/core#hasTopConcept>
+<http://purl.org/dc/elements/1.1/creator>
+<http://purl.org/dc/terms/creator>
+<http://purl.org/dc/terms/dateSubmitted>
+<http://purl.org/dc/terms/description>
+<http://purl.org/dc/terms/modified>
+<http://purl.org/dc/terms/title>
+<http://openskos.org/xmlns#dateDeleted>
+<http://openskos.org/xmlns#deletedBy>
+<http://openskos.org/xmlns#modifiedBy>
+<http://openskos.org/xmlns#set>
+<http://openskos.org/xmlns#status>
+<http://openskos.org/xmlns#tenant>
+<http://openskos.org/xmlns#uuid>
 
 `.../conceptschemes?<query params>&<filter params>&<limit params>`
 
 `.../conceptscheme/{id}?<query params>` (native uri)
+
+`{id}` will be applied to, in order of precedence: <http://openskos.org/xmlns#uuid>
 
 `.../conceptscheme?uri={uri}&<query params>` (foreign uri)
 
 `<query params>`
 * level:
   * `1`: data properties of the concept scheme (default)
-  * `2`: + object properties of the concept scheme
-  * `3`: + data properties of the concept
-  * `4`: + object properties of the concept
+  * `2`: + object properties of the concept scheme [On Hold]
+  * `3`: + data properties of the concept [On Hold]
+  * `4`: + object properties of the concept [On Hold]
+
+NOTE: On large datasets, levels 3 and 4 could impose a significant performance hit
 
 NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more interesting for external LD parties
 
 `<filter params>`
-* institutions=`comma separated list of institution URIs or IDs`
-* sets=`comma separated list of set URIs or IDs`
-* searchProfile=`id of a search profile`
+* institutions=`comma separated list of institution URIs or IDs`. Applied to <http://openskos.org/xmlns#tenant>.
+* sets=`comma separated list of set URIs or IDs`. Applied to <http://openskos.org/xmlns#set> 
+* searchProfile=`id of a search profile`. Stored in MySQL table 'search_profiles'.
 
 `<limit params>`
 * limit=`nr of concept schemes to return`
 * offset=`offset of last seen concept scheme` (NOTE: starts at 0)
 
+
+Return codes
+
+  - 200 Concept Scheme found and data returned
+  - 400 Attempted to filter on un-usable predicate
+  - 400 Unusable limit or level parameters
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
+
 ## collections
+
+@TODO: This section is not complete. Awaiting further details from Meertens.
+
+Institutions have the rdf:type <http://openskos.org/xmlns#set>
 
 `.../collections?<query params>&<filter params>&<limit params>`
 
@@ -212,18 +319,91 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * `3`: + data properties of the concept
   * `4`: + object properties of the concept
 
+NOTE: On large datasets, levels 3 and 4 could impose a significant performance hit
+
 NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more interesting for external LD parties
 
 `<filter params>`
 * institutions=`comma separated list of institution URIs or IDs`
 * sets=`comma separated list of set URIs or IDs`
-* searchProfile=`id of a search profile`
+* searchProfile=`id of a search profile`. Stored in MySQL table 'search_profiles'.
 
 `<limit params>`
 * limit=`nr of collections to return`
 * offset=`offset of last seen collection` (NOTE: starts at 0)
 
+Return codes
+
+  - 200 Collection found and data returned
+  - 400 Attempted to filter on un-usable predicate
+  - 400 Unusable limit or level parameters
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
+
 ## concepts
+
+Concepts have the rdf:type <http://www.w3.org/2004/02/skos/core#Concept>
+
+	
+Concept may contain the following internally used predicates:
+
+<http://www.w3.org/2004/02/skos/core#inScheme>
+<http://purl.org/dc/elements/1.1/contributor>
+<http://purl.org/dc/elements/1.1/creator>
+<http://purl.org/dc/terms/contributor>
+<http://purl.org/dc/terms/creator>
+<http://purl.org/dc/terms/dateAccepted>
+<http://purl.org/dc/terms/dateApproved>
+<http://purl.org/dc/terms/dateSubmitted>
+<http://purl.org/dc/terms/modified>
+<http://purl.org/dc/terms/publisher>
+<http://purl.org/dc/terms/title>
+<http://openskos.org/xmlns#acceptedBy>
+<http://openskos.org/xmlns#dateDeleted>
+<http://openskos.org/xmlns#deletedBy>
+<http://openskos.org/xmlns#modifiedBy>
+<http://openskos.org/xmlns#notation>
+<http://openskos.org/xmlns#set>
+<http://openskos.org/xmlns#status>
+<http://openskos.org/xmlns#tenant>
+<http://openskos.org/xmlns#toBeChecked>
+<http://openskos.org/xmlns#uuid>
+<http://www.w3.org/2004/02/skos/core#notation>
+<http://www.w3.org/2004/02/skos/core#Note>
+<http://www.w3.org/2004/02/skos/core#note>
+<http://www.w3.org/2004/02/skos/core#changeNote>
+<http://www.w3.org/2004/02/skos/core#scopeNote>
+<http://www.w3.org/2004/02/skos/core#historyNote>
+<http://www.w3.org/2004/02/skos/core#prefLabel>
+<http://www.w3.org/2004/02/skos/core#altLabel>
+<http://www.w3.org/2004/02/skos/core#hiddenLabel>
+<http://www.w3.org/2004/02/skos/core#example>
+<http://www.w3.org/2008/05/skos-xl#altLabel>
+<http://www.w3.org/2008/05/skos-xl#hiddenLabel>
+<http://www.w3.org/2008/05/skos-xl#prefLabel>
+
+
+Concepts will also contain the following semantic matches. Some of these are transitive matches, applied via Jena reasoners.
+
+<http://www.w3.org/2004/02/skos/core#broadMatch>
+<http://www.w3.org/2004/02/skos/core#broader>
+<http://www.w3.org/2004/02/skos/core#broaderMatch>
+<http://www.w3.org/2004/02/skos/core#broaderTransitive>
+<http://www.w3.org/2004/02/skos/core#definition>
+<http://www.w3.org/2004/02/skos/core#editorialNote>
+<http://www.w3.org/2004/02/skos/core#exactMatch>
+<http://www.w3.org/2004/02/skos/core#closeMatch>
+<http://www.w3.org/2004/02/skos/core#narrowMatch>
+<http://www.w3.org/2004/02/skos/core#narrower>
+<http://www.w3.org/2004/02/skos/core#narrowerTransitive>
+<http://www.w3.org/2004/02/skos/core#related>
+<http://www.w3.org/2004/02/skos/core#relatedMatch>
+<http://www.w3.org/2004/02/skos/core#topConceptOf>
+
+NOTE: For performance reasons: concepts are searched first in Solr; once matches are found, further filtering is applied via Jena records.
+
+NOTE: Concepts are connected to their relevant Concept Schemes by the Predicate <http://www.w3.org/2004/02/skos/core#inScheme>, and not the rdf:type of the Concept scheme. The connection is a many-to-many relotionship.
 
 `.../concepts?<selection params>[?]&<filter params>&<projection params>&<order params>&<limit params>&<format params>`
 
@@ -255,17 +435,18 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
     * editorialNote(@{lang})?
   * notation
 
+
 `<filter params>`
-* institutions=`comma separated list of institution URIs or IDs`
-* sets=`comma separated list of set URIs or IDs`
-* conceptSchemes=`comma separated list of concept scheme URIs or IDs`
-* collections=`comma separated list of collection URIs or IDs`
-* searchProfile=`id of a search profile`
-* dateSubmitted=`xsd:duration and some shortcuts (?)`
-* modified=`xsd:duration and some shortcuts (?)`
-* dateAccepted=`xsd:duration and some shortcuts (?)`
-* openskos:deleted=`xsd:duration and some shortcuts (?)`
-* statuses=`comma separated list of statuses`
+* institutions=`comma separated list of institution URIs or IDs`. Applied to <http://openskos.org/xmlns#tenant>
+* sets=`comma separated list of set URIs or IDs`. Applied to <http://openskos.org/xmlns#set>
+* conceptSchemes=`comma separated list of concept scheme URIs or IDs`. Applied to <http://www.w3.org/2004/02/skos/core#inScheme>
+* collections=`comma separated list of collection URIs or IDs` [On Hold: Predicate not known]
+* searchProfile=`id of a search profile`. Stored in MySQL table 'search_profiles'.
+* dateSubmitted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateSubmitted> 
+* modified=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/modified>
+* dateAccepted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateAccepted>
+* openskos:deleted=`xsd:duration and some shortcuts (?)`. Applied to  <http://openskos.org/xmlns#dateDeleted>
+* statuses=`comma separated list of statuses`. Applied to <http://openskos.org/xmlns#status>
   * `candidate`
   * `approved`
   * `redirected`
@@ -273,15 +454,17 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * `rejected`
   * `obsolete`
   * `deleted`
-* creator=`comma separated list of user URIs or IDs`
-* openskos:modifiedBy=`comma separated list of user URIs or IDs`
-* openskos:acceptedBy=`comma separated list of user URIs or IDs`
-* openskos:deletedBy=`comma separated list of user URIs or IDs`
+* creator=`comma separated list of user URIs or IDs`. Applied to <http://purl.org/dc/terms/creator>
+* openskos:modifiedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#modifiedBy>
+* openskos:acceptedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#acceptedBy>
+* openskos:deletedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#deletedBy>
+
+NOTE: There are no semantic relations in the filters. The correct way to access these is to recall the concept using level 2, or to use the `.../relations` endpoint
 
 `<projection params>`
 * level=`which properties to return`
   * `1`: data properties of the concepts (default)
-  * `2`: + object properties of the concepts
+  * `2`: + object properties of the concepts [These must be implemented. NOT on-hold]
 * props=`comma separated list of`
   * default: uri,prefLabel,definition
   * all
@@ -354,9 +537,23 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
 * limit=`nr of concepts to return`
 * offset=`offset of last seen concept` (NOTE: starts at 0)
 
+
+Return codes
+
+  - 200 Concept Scheme found and data returned
+  - 400 Attempted to filter on un-usable predicate
+  - 400 Unusable limit or level parameters
+  - 400 Attempted to recall XL labels on a tenant that does not support SkosXL
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
+
 ## autocomplete
 
 `.../concepts/autocomplete?<selection params>&<projection params>&<filter params>`
+
+
+NOTE: For performance reasons: concepts are searched first in Solr; once matches are found, further filtering is applied via Jena records.
 
 `<selection params>`
 * text=`substring to match case insensitively`
@@ -379,16 +576,16 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * notation
 
 `<filter params>`
-* institutions=`comma separated list of institution URIs or IDs`
-* sets=`comma separated list of set URIs or IDs`
-* conceptSchemes=`comma separated list of concept scheme URIs or IDs`
-* collections=`comma separated list of collection URIs or IDs`
-* searchProfile=`id of a search profile`
-* dateSubmitted=`xsd:duration and some shortcuts (?)`
-* modified=`xsd:duration and some shortcuts (?)`
-* dateAccepted=`xsd:duration and some shortcuts (?)`
-* openskos:deleted=`xsd:duration and some shortcuts (?)`
-* statuses=`comma separated list of statuses`
+* institutions=`comma separated list of institution URIs or IDs`. Applied to <http://openskos.org/xmlns#tenant>
+* sets=`comma separated list of set URIs or IDs`. Applied to <http://openskos.org/xmlns#set>
+* conceptSchemes=`comma separated list of concept scheme URIs or IDs`. Applied to <http://www.w3.org/2004/02/skos/core#inScheme>
+* collections=`comma separated list of collection URIs or IDs` [On Hold: Predicate not known]
+* searchProfile=`id of a search profile`. Stored in MySQL table 'search_profiles'.
+* dateSubmitted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateSubmitted> 
+* modified=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/modified>
+* dateAccepted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateAccepted>
+* openskos:deleted=`xsd:duration and some shortcuts (?)`. Applied to  <http://openskos.org/xmlns#dateDeleted>
+* statuses=`comma separated list of statuses`. Applied to <http://openskos.org/xmlns#status>
   * `candidate`
   * `approved`
   * `redirected`
@@ -396,12 +593,15 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * `rejected`
   * `obsolete`
   * `deleted`
-* creator=`comma separated list of user URIs or IDs`
-* openskos:modifiedBy=`comma separated list of user URIs or IDs`
-* openskos:acceptedBy=`comma separated list of user URIs or IDs`
-* openskos:deletedBy=`comma separated list of user URIs or IDs`
-* skosxl=`yes or no` (default: follow configuration of the tenant)
-  * TODO: is this nice?
+* creator=`comma separated list of user URIs or IDs`. Applied to <http://purl.org/dc/terms/creator>
+* openskos:modifiedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#modifiedBy>
+* openskos:acceptedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#acceptedBy>
+* openskos:deletedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#deletedBy>
+
+
+NOTE: Menzo requested the following, but it is output configuration and not a filter parameter
+> * skosxl=`yes or no` (default: follow configuration of the tenant)
+> * TODO: is this nice?
 
 `.../labels/autocomplete?<selection params>&<projection params>&<filter params>`
 
@@ -415,16 +615,16 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * literalForm
 
 `<filter params>`
-* institutions=`comma separated list of institution URIs or IDs`
-* sets=``comma separated list of set URIs or IDs``
-* conceptSchemes=`comma separated list of concept scheme URIs or IDs`
-* collections=`comma separated list of collection URIs or IDs`
-* searchProfile=`id of a search profile`
-* dateSubmitted=`xsd:duration and some shortcuts (?)`
-* modified=`xsd:duration and some shortcuts (?)`
-* dateAccepted=`xsd:duration and some shortcuts (?)`
-* openskos:deleted=`xsd:duration and some shortcuts (?)`
-* statuses=`comma separated list of statuses`
+* institutions=`comma separated list of institution URIs or IDs`. Applied to <http://openskos.org/xmlns#tenant>
+* sets=`comma separated list of set URIs or IDs`. Applied to <http://openskos.org/xmlns#set>
+* conceptSchemes=`comma separated list of concept scheme URIs or IDs`. Applied to <http://www.w3.org/2004/02/skos/core#inScheme>
+* collections=`comma separated list of collection URIs or IDs` [On Hold: Predicate not known]
+* searchProfile=`id of a search profile`. Stored in MySQL table 'search_profiles'.
+* dateSubmitted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateSubmitted> 
+* modified=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/modified>
+* dateAccepted=`xsd:duration and some shortcuts (?)`. Applied to <http://purl.org/dc/terms/dateAccepted>
+* openskos:deleted=`xsd:duration and some shortcuts (?)`. Applied to  <http://openskos.org/xmlns#dateDeleted>
+* statuses=`comma separated list of statuses`. Applied to <http://openskos.org/xmlns#status>
   * `candidate`
   * `approved`
   * `redirected`
@@ -432,16 +632,21 @@ NOTE: the OpenSKOS editor should never use level `3` or `4`, they're more intere
   * `rejected`
   * `obsolete`
   * `deleted`
-* creator=`comma separated list of user URIs or IDs`
-* openskos:modifiedBy=`comma separated list of user URIs or IDs`
-* openskos:acceptedBy=`comma separated list of user URIs or IDs`
-* openskos:deletedBy=`comma separated list of user URIs or IDs`
+* creator=`comma separated list of user URIs or IDs`. Applied to <http://purl.org/dc/terms/creator>
+* openskos:modifiedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#modifiedBy>
+* openskos:acceptedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#acceptedBy>
+* openskos:deletedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#deletedBy>
 
 TODO: lots of these bookkeeping-based filters depend on SKOS-XL labels being first class citizens!
 
 ## labels
 
-NOTE: SKOS-XL
+> NOTE over SKOS-XL
+> 
+> Skos-XL labels are formally not first-class citizens in OpenSkos. Implementing the structure desribed here would involve changes to the existing openskos editor and structure.
+> This is currenly not budgeted for
+> 
+> B.Hillier
 
 `.../labels?<selection params>&<filter params>&<projection params>&<order params>&<limit params>`
 
@@ -494,33 +699,33 @@ NOTE: maybe only when `skosxl:label` are first class citizens
 * subject=`uri`
 * types=`comma separated list of relation types`
   * semanticRelation
-    * broader
-    * narrower
-    * related
-    * broaderTransitive
-    * narrowerTransitive
+    * broader . Applied to <http://www.w3.org/2004/02/skos/core#broader>
+    * narrower. Applied to <http://www.w3.org/2004/02/skos/core#narrower>
+    * related. Applied to <http://www.w3.org/2004/02/skos/core#related>
+    * broaderTransitive. Applied to <http://www.w3.org/2004/02/skos/core#broaderTransitive>
+    * narrowerTransitive. Applied to <http://www.w3.org/2004/02/skos/core#narrowerTransitive>
     * mappingRelation
-      * closeMatch
-      * exactMatch
-      * broadMatch
-      * narrowMatch
-      * relatedMatch
+      * closeMatch. Applied to <http://www.w3.org/2004/02/skos/core#closeMatch>
+      * exactMatch. Applied to <http://www.w3.org/2004/02/skos/core#exactMatch>
+      * broadMatch. Applied to <http://www.w3.org/2004/02/skos/core#broadMatch>
+      * narrowMatch. Applied to <http://www.w3.org/2004/02/skos/core#narrowMatch>
+      * relatedMatch. Applied to <http://www.w3.org/2004/02/skos/core#relatedMatch>
   * inScheme
-    * topConceptOf
+    * topConceptOf. Applied to <http://www.w3.org/2004/02/skos/core#topConceptOf>
   * isReplacedBy (NOTE: currently not yet a triple in OpenSKOS)
   * replaces (NOTE: currently not yet a triple in OpenSKOS)
   * openskos:inCollection (OpenSKOS specific inverse of skos:member) [NOTE: currently inSkosCollection]
   * openskos:inSet (NOTE: currently openskos:set)
-  * openskos:tenant
-  * member
-  * hasTopConcept
-  * prefLabel
-  * altLabel
-  * hiddenLabel
-  * openskos:isPrefLabelOf (inverse of prefLabel)
-  * openskos:isAltLabelOf (inverse of altLabel)
-  * openskos:isHiddenLabelOf (inverse of hiddenLabel)
-  * labelRelation
+  * openskos:tenant. Applied to <http://openskos.org/xmlns#tenant>
+  * member. [On hold. Waiting for details of Skos Collections]
+  * hasTopConcept. Applied to <http://www.w3.org/2004/02/skos/core#hasTopConcept>
+  * prefLabel. Applied to <http://www.w3.org/2004/02/skos/core#prefLabel>
+  * altLabel. Applied to <http://www.w3.org/2004/02/skos/core#altLabel>
+  * hiddenLabel. Applied to <http://www.w3.org/2004/02/skos/core#hiddenLabel>
+  * openskos:isPrefLabelOf (inverse of prefLabel) [On Hold. Currently not part of OpenSkos]
+  * openskos:isAltLabelOf (inverse of altLabel) [On Hold. Currently not part of OpenSkos]
+  * openskos:isHiddenLabelOf (inverse of hiddenLabel) [On Hold. Currently not part of OpenSkos]
+  * labelRelation [@TODO. What is meant here]
   * {user relation types} [TODO: how to handle URIs, e.g., register prefix in application.ini]
 * object=`uri`
 
@@ -540,6 +745,15 @@ TODO: what does it mean for subject and object?
 `<limit params>`
 * limit=`nr of subjects to return`
 * offset=`offset of last seen subject` (NOTE: starts at 0)
+
+Return codes
+
+  - 200 Set found and data returned
+  - 400 Attempted to filter on un-usable predicate (all of them)
+  - 400 Unusable limit or level parameters
+  - 404 No resource could be matched
+  - 406 unsupported RDF serialization
+  - 500 Unexpected error
 
 ## relation types
 
