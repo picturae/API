@@ -186,7 +186,7 @@ Return codes
 
 ## sets
 
-Institutions have the rdf:type <http://openskos.org/xmlns#set>
+Sets have the rdf:type <http://openskos.org/xmlns#set>
 
 Sets contain the following internally used predicates:
 
@@ -637,7 +637,9 @@ NOTE: Menzo requested the following, but it is output configuration and not a fi
 * openskos:acceptedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#acceptedBy>
 * openskos:deletedBy=`comma separated list of user URIs or IDs`. Applied to <http://openskos.org/xmlns#deletedBy>
 
-TODO: lots of these bookkeeping-based filters depend on SKOS-XL labels being first class citizens!
+@TODO: lots of these bookkeeping-based filters depend on SKOS-XL labels being first class citizens!
+
+@TODO: There is currently no specification for the HTTP return codes for the _autocomplete_. To be discussed. 
 
 ## labels
 
