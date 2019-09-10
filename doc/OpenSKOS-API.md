@@ -304,7 +304,10 @@ Return codes
 
 @TODO: This section is not complete. Awaiting further details from Meertens.
 
-Institutions have the rdf:type <http://openskos.org/xmlns#set>
+Collections have the rdf:type's <http://www.w3.org/2004/02/skos/core#Collection> and <http://www.w3.org/2004/02/skos/core#OrderedCollection> (awaiting further details from Meertens)
+
+It is very possible that Meertens' data is 100% compliant with: https://www.w3.org/TR/skos-reference/#collections , but I cannot confirm that at present
+
 
 `.../collections?<query params>&<filter params>&<limit params>`
 
@@ -542,6 +545,8 @@ Return codes
 
   - 200 Concept Scheme found and data returned
   - 400 Attempted to filter on un-usable predicate
+  - 400 Attempted to use non-valid projection/selection or order fields
+  - 400 Unreadable values in  projection/selection or order values
   - 400 Unusable limit or level parameters
   - 400 Attempted to recall XL labels on a tenant that does not support SkosXL
   - 404 No resource could be matched
@@ -753,6 +758,8 @@ Return codes
   - 200 Set found and data returned
   - 400 Attempted to filter on un-usable predicate (all of them)
   - 400 Unusable limit or level parameters
+  - 400 Attempted to use non-valid projection/selection or order fields
+  - 400 Unreadable values in  projection/selection or order values
   - 404 No resource could be matched
   - 406 unsupported RDF serialization
   - 500 Unexpected error
