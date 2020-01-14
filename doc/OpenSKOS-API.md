@@ -28,7 +28,7 @@
   - 405 method not allowed, e.g., a PUT on a list
   - 406 unsupported RDF serialization
   - 500 and higher: oops
-- [ ] return representations (at least JSON-LD, RDF/XML, TriG/TriX, (incl. Hydra paging vocab), HTML)
+- [X] return representations (at least JSON-LD, RDF/XML, TriG/TriX, (incl. Hydra paging vocab), HTML)
 - [X] support for dates in projection, selection/filter and order
   - submitted
   - modified
@@ -47,23 +47,23 @@
 - [X] support for SKOS-XL labels
 - [ ] check consistent use of institution vs tenant
 - [ ] discuss the first class citizenship of `skosxl:Labels`
-- [ ] add format parameter
+- [X] add format parameter
 - [ ] lists of many (all?) resources are filtered based on access rights, e.g., admin can see all, users can only see what belongs to their institution (or their searchProfile allows)
 
 ## Foundation
 
-* content negotiation
-  * also a parameter (?format=)
-  * incl. HTML (containing the same info as the RDF serializations)
-  * JSON-LD instead of proprietary JSON
-  * support at least JSON-LD, RDF/XML, TriG/TriX, (incl. Hydra paging vocab), HTML
-  * all should return the same info, which is controlled (potentially) by the projection parameters
-* API key in header and use HTTPS always
+* [X] content negotiation
+  * [X] also a parameter (?format=)
+  * [ ] incl. HTML (containing the same info as the RDF serializations)
+  * [X] JSON-LD instead of proprietary JSON
+  * [/] support at least JSON-LD, RDF/XML, TriG/TriX, (incl. Hydra paging vocab), HTML
+  * [X] all should return the same info, which is controlled (potentially) by the projection parameters
+* [ ] API key in header and use HTTPS always
   * good for security, bad for traceability (look at server logs and see who has done what)
-* focus on read-only first
-* hide implementation details (Lucene query language)
-* using just OpenSKOS generated URIs should work out of the box
-* using foreign URIs (external SKOS imported into OpenSKOS) should work out of the box (just don't use id endpoints)
+* [X] focus on read-only first
+* [ ] hide implementation details (Lucene query language)
+* [ ] using just OpenSKOS generated URIs should work out of the box
+* [ ] using foreign URIs (external SKOS imported into OpenSKOS) should work out of the box (just don't use id endpoints)
 
 ## Does the new API remedy critisism on the old API?
 - [X] the API should identify **resources** instead of **actions** (TODO: maybe autocomplete is still too action like)
